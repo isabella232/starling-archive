@@ -51,8 +51,7 @@ class ConcreteVideoTexture extends ConcreteTexture
     }
 
     /** @private */
-    override public function attachVideo(type:String, attachment:Dynamic,
-                                           onComplete:Function=null):Void
+    override public function attachVideo(type:String, attachment:Dynamic, onComplete:Dynamic=null):Void
     {
         _textureReadyCallback = onComplete;
         Reflect.setProperty(base, "attach" + type, attachment);
