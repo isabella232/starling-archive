@@ -65,7 +65,12 @@ class Program
     public static function fromSource(vertexShader:String, fragmentShader:String,
                                       agalVersion:UInt=1):Program
     {
-        #if (openfl >= "4.0.0")
+        #if lime_has_separate_gl_context
+        var context:Context3D = Starling.current.context;
+        return new Program(
+            sAssembler.assemble(context, Context3DProgramType.VERTEX, vertexShader/*, agalVersion*/),
+            sAssembler.assemble(context, Context3DProgramType.FRAGMENT, fragmentShader/*, agalVersion*/));
+        #elseif (openfl >= "4.0.0")
         return new Program(
             sAssembler.assemble(Context3DProgramType.VERTEX, vertexShader/*, agalVersion*/),
             sAssembler.assemble(Context3DProgramType.FRAGMENT, fragmentShader/*, agalVersion*/));
