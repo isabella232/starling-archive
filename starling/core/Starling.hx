@@ -818,7 +818,7 @@ class Starling extends EventDispatcher
 
         if (!_skipUnchangedFrames || _painter.shareContext)
             return true;
-        else if (SystemUtil.isDesktop && profile != Context3DProfile.BASELINE_CONSTRAINED)
+        else if (#if native false && #end SystemUtil.isDesktop && profile != Context3DProfile.BASELINE_CONSTRAINED)
             return false;
         else
         {
