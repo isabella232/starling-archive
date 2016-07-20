@@ -11,6 +11,7 @@
 package starling.display;
 import flash.geom.Matrix;
 import starling.styles.MeshStyle;
+import starling.utils.TypeComparison;
 
 import starling.rendering.IndexData;
 import starling.rendering.MeshEffect;
@@ -169,7 +170,7 @@ class MeshBatch extends Mesh
         var meshStyle:MeshStyle = mesh._style;
         var meshStyleType:Class<MeshStyle> = meshStyle.type;
 
-        if (_style.type != meshStyleType)
+        if (!TypeComparison.fastClassEq(_style.type, meshStyleType))
             setStyle(Type.createInstance(meshStyleType, []), false);
 
         _style.copyFrom(meshStyle);
