@@ -648,7 +648,9 @@ class AssetManager extends EventDispatcher
         var PROGRESS_PART_ASSETS:Float = 0.9;
         var PROGRESS_PART_XMLS:Float = 1.0 - PROGRESS_PART_ASSETS;
 
+        #if 0
         var i:Int;
+        #end
         var canceled:Bool = false;
         var xmls:Array<Xml> = new Array<Xml>();
         var assetInfos:Array<QueuedAsset> = _queue.copy();
@@ -664,13 +666,6 @@ class AssetManager extends EventDispatcher
         var processXml:Int->Void = null;
         var finish:Void->Void = null;
         var resume:Void->Void = null;
-
-        for (i in 0 ... numConnections)
-            loadNextQueueElement();
-
-        ArrayUtil.clear(_queue);
-        _numLoadingQueues++;
-        addEventListener(Event.CANCEL, cancel);
 
         function loadNextQueueElement():Void
         {
@@ -811,13 +806,11 @@ class AssetManager extends EventDispatcher
                 }
             }, 1);
         }
-        
-        //for (i=0; i<assetCount; ++i)
+
         for (i in 0 ... assetCount)
             assetProgress[i] = 0.0;
 
-        //for (i=0; i<_numConnections; ++i)
-        for (i in 0 ... _numConnections)
+        for (i in 0 ... numConnections)
             loadNextQueueElement();
 
         ArrayUtil.clear(_queue);
