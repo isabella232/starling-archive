@@ -24,6 +24,7 @@ import flash.utils.Dictionary;
 #end
 
 import starling.display.MeshBatch;
+using starling.display.MeshBatchTools;
 
 /** This class manages a list of mesh batches of different types;
  *  it acts as a "meta" MeshBatch that initiates all rendering.
@@ -90,7 +91,7 @@ class BatchProcessor
 
         if (subset.numVertices > 0)
         {
-            if (_currentBatch == null || !_currentBatch.canAddMesh(mesh, subset.numVertices))
+            if (_currentBatch == null || !_currentBatch.fastCanAddMesh(mesh, subset.numVertices))
             {
                 finishBatch();
 
@@ -104,7 +105,7 @@ class BatchProcessor
             var matrix:Matrix = state != null ? @:privateAccess state._modelviewMatrix : null;
             var alpha:Float  = state != null ? @:privateAccess state._alpha : 1.0;
 
-            _currentBatch.addMesh(mesh, matrix, alpha, subset, ignoreTransformations);
+            _currentBatch.fastAddMesh(mesh, matrix, alpha, subset, ignoreTransformations);
             _cacheToken.vertexID += subset.numVertices;
             _cacheToken.indexID  += subset.numIndices;
         }

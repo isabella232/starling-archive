@@ -23,6 +23,7 @@ import starling.events.EventDispatcher;
 import starling.rendering.*;
 import starling.textures.Texture;
 import starling.textures.TextureSmoothing;
+using starling.rendering.VertexDataTools;
 
 /** Dispatched every frame on styles assigned to display objects connected to the stage. */
 #if 0
@@ -200,7 +201,7 @@ class MeshStyle extends EventDispatcher
     public function batchVertexData(targetStyle:MeshStyle, targetVertexID:Int=0,
                                     matrix:Matrix=null, vertexID:Int=0, numVertices:Int=-1):Void
     {
-        _vertexData.copyTo(targetStyle._vertexData, targetVertexID, matrix, vertexID, numVertices);
+        _vertexData.fastCopyTo(targetStyle._vertexData, targetVertexID, matrix, vertexID, numVertices);
     }
 
     /** Copies the index data of the style's current target to the target of another style.

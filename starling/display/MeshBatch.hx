@@ -20,6 +20,8 @@ import starling.rendering.VertexData;
 import starling.utils.MatrixUtil;
 import starling.utils.MeshSubset;
 
+using starling.styles.MeshStyleTools;
+
 /** Combines a number of meshes to one display object and renders them efficiently.
  *
  *  <p>The most basic tangible (non-container) display object in Starling is the Mesh.
@@ -127,7 +129,7 @@ class MeshBatch extends Mesh
         if (targetVertexID == 0)
             setupFor(mesh);
 
-        meshStyle.batchVertexData(_style, targetVertexID, matrix, subset.vertexID, subset.numVertices);
+        meshStyle.fastBatchVertexData(_style, targetVertexID, matrix, subset.vertexID, subset.numVertices);
         meshStyle.batchIndexData(_style, targetIndexID, targetVertexID - subset.vertexID,
             subset.indexID, subset.numIndices);
 

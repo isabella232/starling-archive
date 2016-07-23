@@ -49,6 +49,8 @@ import starling.utils.SystemUtil;
 use namespace starling_internal;
 #end
 
+using starling.rendering.BatchProcessorTools;
+
 #if flash
 typedef WeakObjectMap<K, V> = haxe.ds.WeakMap<{}, V>;
 #else
@@ -506,7 +508,7 @@ class Painter
      */
     public function batchMesh(mesh:Mesh, subset:MeshSubset=null):Void
     {
-        _batchProcessor.addMesh(mesh, _state, subset);
+        _batchProcessor.fastAddMesh(mesh, _state, subset, false);
     }
 
     /** Finishes the current mesh batch and prepares the next one. */
