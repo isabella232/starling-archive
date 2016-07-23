@@ -769,7 +769,7 @@ class Painter
     public var stencilReferenceValue(get, set):UInt;
     @:noCompletion private function get_stencilReferenceValue():UInt
     {
-        var key:Dynamic = _state.renderTarget != null ? _state.renderTargetBase : this;
+        var key:Dynamic = _state.renderTarget != null ? (_state.renderTargetBase : Dynamic) : this;
         var value:Null<UInt> = _stencilReferenceValues.get(key);
         if (value != null) return value;
         else return 0;
@@ -777,7 +777,7 @@ class Painter
 
     @:noCompletion private function set_stencilReferenceValue(value:UInt):UInt
     {
-        var key:Dynamic = _state.renderTarget != null ? _state.renderTargetBase : this;
+        var key:Dynamic = _state.renderTarget != null ? (_state.renderTargetBase : Dynamic) : this;
         _stencilReferenceValues.set(key, value);
 
         if (contextValid)

@@ -156,7 +156,7 @@ class TextField extends DisplayObjectContainer
                 registerBitmapFont(bitmapFont);
             }
 
-            _compositor = bitmapFont != null ? bitmapFont : sTrueTypeCompositor;
+            _compositor = bitmapFont != null ? (bitmapFont : ITextCompositor) : sTrueTypeCompositor;
 
             updateText();
             updateBorder();
