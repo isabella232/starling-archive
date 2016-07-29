@@ -29,7 +29,7 @@ starling-openfl limitations:
   * I only tested with Windows and Android devices.
 * DisplacementMapFilter don't work correctly. The filter just moves a object a little bit.
   * Noises that are used in DisplacementMapFilter example cannot be generated on OpenFL for now.
-* Mini-Bitmap Font is not supported on html5.
+* ~~Mini-Bitmap Font is not supported on html5.~~ Mini-Bitmap Font now works correctly on html5 with latest version of OpenFL.
 
 OpenFL Limitations(As of 3.6.1):
 
