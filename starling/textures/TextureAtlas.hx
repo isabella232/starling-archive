@@ -102,7 +102,8 @@ class TextureAtlas
         var region:Rectangle = new Rectangle();
         var frame:Rectangle  = new Rectangle();
         
-        for(subTexture in atlasXml.elementsNamed("SubTexture"))
+        var firstElement:Xml = atlasXml.firstElement();
+        for(subTexture in firstElement.elementsNamed("SubTexture"))
         {
             var name:String        = StringUtil.clean(subTexture.get("name"));
             var x:Float           = Std.parseFloat(subTexture.get("x")) / scale;

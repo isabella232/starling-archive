@@ -855,9 +855,9 @@ class AssetManager extends EventDispatcher
             else if (Std.is(asset, Xml))
             {
                 xml = cast asset;
-                xml = xml.firstElement();
+                var firstElement:Xml = xml.firstElement();
                 
-                if (xml.nodeName == "TextureAtlas" || xml.nodeName == "font")
+                if (firstElement.nodeName == "TextureAtlas" || firstElement.nodeName == "font")
                     xmls.push(xml);
                 else
                     addXml(name, xml);
