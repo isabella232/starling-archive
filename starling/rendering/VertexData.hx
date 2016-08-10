@@ -167,6 +167,9 @@ class VertexData
         _rawData.endian = sBytes.endian = Endian.LITTLE_ENDIAN;
         _rawData.length = initialCapacity * _vertexSize; // just for the initial allocation
         _rawData.length = 0;                             // changes length, but not memory!
+
+        // initialize fields for dynamic targets
+        _tinted = false;
     }
 
     /** Explicitly frees up the memory used by the ByteArray. */
