@@ -816,9 +816,10 @@ class Starling extends EventDispatcher
         // standard display list is only rendered after calling "context.present()".
         // In such a case, we cannot omit frames if there is any content on the stage.
 
+        #if 0
         if (!_skipUnchangedFrames || _painter.shareContext)
             return true;
-        else if (#if native false && #end SystemUtil.isDesktop && profile != Context3DProfile.BASELINE_CONSTRAINED)
+        else if (SystemUtil.isDesktop && profile != Context3DProfile.BASELINE_CONSTRAINED)
             return false;
         else
         {
@@ -829,6 +830,9 @@ class Starling extends EventDispatcher
 
             return mustAlwaysRender;
         }
+        #else
+        return true;
+        #end
     }
 
     // properties
