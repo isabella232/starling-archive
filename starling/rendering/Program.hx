@@ -64,7 +64,7 @@ class Program
     public static function fromSource(vertexShader:String, fragmentShader:String,
                                       agalVersion:UInt=1):Program
     {
-        #if lime_has_separate_gl_context
+        #if 0
         var context:Context3D = Starling.current.context;
         return new Program(
             sAssembler.assemble(context, Context3DProgramType.VERTEX, vertexShader/*, agalVersion*/),
