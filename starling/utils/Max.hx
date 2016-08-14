@@ -20,7 +20,7 @@ class Max
     /** he largest representable 32-bit unsigned integer. */
     public static var UINT_MAX_VALUE:UInt;
     
-    private static function __init()
+    private static function __init__()
     {
         #if cs
         untyped __cs__("unchecked{");
