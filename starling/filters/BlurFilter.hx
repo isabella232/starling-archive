@@ -158,8 +158,8 @@ class BlurEffect extends FilterEffect
     private var _strength:Float;
     private var _direction:String;
 
-    private var _offsets:Vector<Float> = Vector.ofArray([0, 0, 0, 0]);
-    private var _weights:Vector<Float> = Vector.ofArray([0, 0, 0, 0]);
+    private var _offsets:Vector<Float> = Vector.ofArray([0.0, 0, 0, 0]);
+    private var _weights:Vector<Float> = Vector.ofArray([0.0, 0, 0, 0]);
 
     // helpers
     private var sTmpWeights:Vector<Float> = new Vector<Float>(5, true);

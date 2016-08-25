@@ -231,9 +231,9 @@ class ColorMatrixFilter extends FragmentFilter
 class ColorMatrixEffect extends FilterEffect
 {
     private var _userMatrix:Array<Float>;   // offset in range 0-255
-    private var _shaderMatrix:Array<Float>; // offset in range 0-1, changed order
+    private var _shaderMatrix:Vector<Float>; // offset in range 0-1, changed order
 
-    private static var MIN_COLOR:Array<Float> = [0, 0, 0, 0.0001];
+    private static var MIN_COLOR:Vector<Float> = Vector.ofArray ([0, 0, 0, 0.0001]);
     private static var IDENTITY:Array<Float> = [1.0,0,0,0,0,  0,1,0,0,0,  0,0,1,0,0,  0,0,0,1,0];
 
     // helpers
@@ -243,7 +243,7 @@ class ColorMatrixEffect extends FilterEffect
     {
         super();
         _userMatrix   = new Array<Float>();
-        _shaderMatrix = new Array<Float>();
+        _shaderMatrix = new Vector<Float>();
 
         this.matrix = null;
     }
@@ -313,7 +313,7 @@ class ColorMatrixEffect extends FilterEffect
         // the shader needs the matrix components in a different order,
         // and it needs the offsets in the range 0-1.
 
-        ArrayUtil.clear(_shaderMatrix);
+        _shaderMatrix.length = 0;
         
         _shaderMatrix.push(_userMatrix[ 0]);
         _shaderMatrix.push(_userMatrix[ 1]);
