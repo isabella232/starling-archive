@@ -738,12 +738,13 @@ class AssetManager extends EventDispatcher
             var name:String;
             var texture:Texture;
             var xml:Xml = xmls[index];
-            var rootNode:String = xml.nodeName;
+            var firstElement:Xml = xml.firstElement();
+            var rootNode:String = firstElement.nodeName;
             var xmlProgress:Float = (index + 1) / (xmls.length + 1);
 
             if (rootNode == "TextureAtlas")
             {
-                name = getName(xml.get("imagePath"));
+                name = getName(firstElement.get("imagePath"));
                 texture = getTexture(name);
 
                 if (texture != null)

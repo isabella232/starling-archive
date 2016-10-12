@@ -216,7 +216,7 @@ class DisplacementMapEffect extends FilterEffect
     private static var sOffset:Vector<Float> = Vector.ofArray([0.5, 0.5, 0.0, 0.0]);
     private static var sMatrix:Matrix3D = new Matrix3D();
     private static var sMatrixData:Vector<Float> =
-        Vector.ofArray([0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0]);
+        Vector.ofArray([0.0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0]);
 
     public function new()
     {
