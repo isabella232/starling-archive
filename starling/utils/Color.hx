@@ -61,9 +61,9 @@ class Color
 
     /** Converts a color to a vector containing the RGBA components (in this order) scaled
      *  between 0 and 1. */
-    public static function toVector(color:UInt, out:Array<Float>=null):Vector<Float>
+    public static function toVector(color:UInt, out:Vector<Float>=null):Vector<Float>
     {
-        if (out == null) out = new Vector<Float>(4);
+        if (out == null) out = new Vector<Float>();
 
         out[0] = ((color >> 16) & 0xff) / 255.0;
         out[1] = ((color >>  8) & 0xff) / 255.0;
