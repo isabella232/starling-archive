@@ -6,6 +6,7 @@ import lime.utils.UInt32Array;
 import openfl.utils.ArrayBuffer;
 import openfl.utils.Float32Array;
 import openfl.utils.ByteArray.ByteArrayData;
+import starling.utils.Float32ArrayWrapper.Float32ArrayWrappedData;
 
 @:forward(clear, fastReadFloat, fastWriteBytes, fastWriteFloat, fastWriteUnsignedInt, readFloat, readUnsignedInt, resize, writeBytes, writeFloat, writeUnsignedInt, bytesAvailable, endian, length, position)
 abstract Float32ArrayWrapper(Float32ArrayWrappedData) from Float32ArrayWrappedData to Float32ArrayWrappedData
@@ -141,7 +142,7 @@ class Float32ArrayWrappedData
     #if (cs && unsafe)
     @:unsafe @:skipReflection
     #end
-    public #if flash inline #end function fastWriteBytes(ptr:UInt8Ptr, bytes:ByteArray, offset:UInt, length:UInt)
+    public #if flash inline #end function fastWriteBytes(ptr:UInt8Ptr, bytes:Float32ArrayWrapper, offset:UInt, length:UInt)
     {
         #if (cs && unsafe)
         
@@ -162,9 +163,10 @@ class Float32ArrayWrappedData
         #elseif flash
         data.writeBytes(bytes, offset, length);
         #elseif (js && bytearray_wrap)
-        @:privateAccess (data:ByteArrayData).b.set(
-            (offset == 0 && length == (bytes:ByteArrayData).b.length) ? (bytes:ByteArrayData).b : @:privateAccess (bytes:ByteArrayData).b.subarray(offset, offset + length),
-            this.data.position);
+        var pos = Std.int(this.data.position / 4);
+        var srcPos = Std.int(offset / 4);
+        for (i in 0 ... Std.int(length / 4))
+            uint32Array[pos++] = (bytes:Float32ArrayWrappedData).uint32Array[srcPos++];
         this.data.position += length;
         #else
         (data:ByteArrayData).blit(position, (bytes:ByteArrayData), offset, length);

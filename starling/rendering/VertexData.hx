@@ -242,6 +242,25 @@ class VertexData
                 var x:Float, y:Float;
                 var pos:Int = targetVertexID * _vertexSize + _posOffset;
                 var endPos:Int = pos + (numVertices * _vertexSize);
+                
+                #if js
+                
+                var f32Pos:Int = Std.int(pos / 4);
+                var f32EndPos:Int = Std.int(endPos / 4);
+                var vertexSizeIn32Bits:Int = vertexSizeIn32Bits;
+                var f32Array = @:privateAccess (targetRawData:Float32ArrayWrappedData).float32Array;
+                
+                while (f32Pos < f32EndPos)
+                {
+                    x = f32Array[f32Pos];
+                    y = f32Array[f32Pos+1];
+                    f32Array[f32Pos] = matrix.a * x + matrix.c * y + matrix.tx;
+                    f32Array[f32Pos+1] = matrix.d * y + matrix.b * x + matrix.ty;
+                    f32Pos += vertexSizeIn32Bits;
+                }
+                
+                #else
+                
                 #if (cs && unsafe)
                 untyped __cs__("float *px");
                 untyped __cs__("float *py");
@@ -268,6 +287,7 @@ class VertexData
 
                     pos += _vertexSize;
                 }
+                #end
             }
             
             #if (cs && unsafe)
