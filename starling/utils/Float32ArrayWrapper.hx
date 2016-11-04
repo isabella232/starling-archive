@@ -87,7 +87,7 @@ class Float32ArrayWrappedData
     #if (cs && unsafe)
     @:unsafe @:skipReflection
     #end
-    public #if (!cs && !unsafe) inline #end function writeBytes(bytes:ByteArray, offset:UInt=0, length:UInt=0)
+    public #if (!cs && !unsafe) inline #end function writeBytes(bytes:ByteArray, offset:Int=0, length:Int=0)
     {
         #if (cs && unsafe)
         @:privateAccess (data:ByteArrayData).__resize (data.position + length);
@@ -141,7 +141,7 @@ class Float32ArrayWrappedData
     #if (cs && unsafe)
     @:unsafe @:skipReflection
     #end
-    public #if flash inline #end function fastWriteBytes(ptr:UInt8Ptr, bytes:ByteArray, offset:UInt, length:UInt)
+    public #if flash inline #end function fastWriteBytes(ptr:UInt8Ptr, bytes:ByteArray, offset:Int, length:Int)
     {
         #if (cs && unsafe)
         
@@ -210,7 +210,7 @@ class Float32ArrayWrappedData
         #end
     }
     
-    public inline function resize(value:UInt):Void
+    public inline function resize(value:Int):Void
     {
         #if flash
         length = value;
