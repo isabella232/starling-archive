@@ -49,8 +49,8 @@ class Float32ArrayWrappedData
         data = new ByteArray();
         #if (js && bytearray_wrap)
         var buffer:ArrayBuffer = data.toArrayBuffer();
-        float32Array = new Float32Array(buffer);
-        uint32Array = new UInt32Array(buffer);
+        float32Array = untyped __js__("new Float32Array({0})", buffer);
+        uint32Array = untyped __js__("new Uint32Array({0})", buffer);
         #end
     }
     
@@ -210,13 +210,18 @@ class Float32ArrayWrappedData
         #end
     }
     
-    public inline function resize(value:Int):Void
+    public #if flash inline #end function resize(value:Int):Void
     {
         #if flash
         length = value;
         #else
-        @:privateAccess (data:ByteArrayData).__resize(value);
-        createTypedArrays();
+        if (value > @:privateAccess (data:ByteArrayData).__length)
+        {
+            @:privateAccess (data:ByteArrayData).__resize(value);
+            var buffer:ArrayBuffer = data.toArrayBuffer();
+            float32Array = untyped __js__("new Float32Array({0})", buffer);
+            uint32Array = untyped __js__("new Uint32Array({0})", buffer);
+        }
         #end
     }
     
@@ -226,8 +231,8 @@ class Float32ArrayWrappedData
         var buffer:ArrayBuffer = data.toArrayBuffer();
         if (buffer != float32Array.buffer)
         {
-            float32Array = new Float32Array(buffer, 0, Std.int(buffer.byteLength / 4));
-            uint32Array = new UInt32Array(buffer, 0, Std.int(buffer.byteLength / 4));
+            float32Array = untyped __js__("new Float32Array({0})", buffer);
+            uint32Array = untyped __js__("new Uint32Array({0})", buffer);
         }
         #end
     }
