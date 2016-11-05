@@ -215,16 +215,16 @@ class Float32ArrayWrappedData
     {
         #if flash
         length = value;
-        #else
+        #elseif (js && bytearray_wrap)
         if (value > @:privateAccess (data:ByteArrayData).__length)
         {
             @:privateAccess (data:ByteArrayData).__resize(value);
             var buffer:ArrayBuffer = data.toArrayBuffer();
-			#if (js && bytearray_wrap)
             float32Array = untyped __js__("new Float32Array({0})", buffer);
             uint32Array = untyped __js__("new Uint32Array({0})", buffer);
-			#end
         }
+        #else
+        @:privateAccess (data:ByteArrayData).__resize(value);
         #end
     }
     
