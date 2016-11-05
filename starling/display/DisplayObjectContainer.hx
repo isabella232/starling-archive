@@ -389,9 +389,15 @@ class DisplayObjectContainer extends DisplayObject
                     child._lastChildChangeFrameID != frameID &&
                     child._tokenFrameID == frameID - 1)
                 {
-                    painter.pushState(sCacheToken);
+                    if (!stateSaved)
+                    {
+                        painter.pushState(sCacheToken);
+                        stateSaved = true;
+                    }
+                    else
+                        @:privateAccess painter._batchProcessor.fillToken(child._pushToken);
                     painter.drawFromCache(child._pushToken, child._popToken);
-                    painter.popState(child._popToken);
+                    painter.restoreState(child._popToken);
 
                     child._pushToken.copyFrom(sCacheToken);
                 }
