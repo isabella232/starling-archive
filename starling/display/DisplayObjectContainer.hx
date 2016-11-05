@@ -395,7 +395,7 @@ class DisplayObjectContainer extends DisplayObject
                         stateSaved = true;
                     }
                     else
-                        @:privateAccess painter._batchProcessor.fillToken(child._pushToken);
+                        @:privateAccess painter._batchProcessor.fillToken(sCacheToken);
                     painter.drawFromCache(child._pushToken, child._popToken);
                     painter.restoreState(child._popToken);
 
