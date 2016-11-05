@@ -91,8 +91,8 @@ class Float32ArrayWrappedData
     {
         #if (cs && unsafe)
         @:privateAccess (data:ByteArrayData).__resize (data.position + length);
-        untyped __cs__("fixed(byte *dst = this.data.b, src = bytes.b){");
-        untyped __cs__("byte *d = dst + this.data.position, s = src + offset.@value");
+        untyped __cs__("fixed(byte *dst = {0}, src = {1}){", this.data.b, bytes.b);
+        untyped __cs__("byte *d = dst + {0}, s = src + {1}", this.data.position, offset);
         for (i in 0 ... length)
         {
             untyped __cs__("*d = *s");
@@ -130,7 +130,7 @@ class Float32ArrayWrappedData
     public #if (!cs && !unsafe) inline #end function fastReadFloat(ptr:UInt8Ptr):Float
     {
         #if (cs && unsafe)
-        var r:Float = untyped __cs__("*(float*)&ptr[data.position]");
+        var r:Float = untyped __cs__("*(float*)&ptr[{0}]", data.position);
         data.position += 4;
         return r;
         #else
@@ -150,9 +150,9 @@ class Float32ArrayWrappedData
             throw "length should be multiple of 4";
         #end
         
-        untyped __cs__("fixed(byte *src = bytes.b){");
-        untyped __cs__("uint *d = (uint*)(ptr + this.data.position), s = (uint*)(src + offset)");
-        for (i in 0 ... untyped __cs__("(int)(length / 4)"))
+        untyped __cs__("fixed(byte *src = bytes.data.b){");
+        untyped __cs__("uint *d = (uint*)({0} + {1}), s = (uint*)(src + {2})", ptr, this.data.position, offset);
+        for (i in 0 ... untyped __cs__("(int)({0} / 4)", length))
         {
             untyped __cs__("*d = *s");
             untyped __cs__("d++;s++");
@@ -179,7 +179,7 @@ class Float32ArrayWrappedData
     public #if (!cs && !unsafe) inline #end function fastWriteFloat(ptr:UInt8Ptr, v:Float):Void
     {
         #if (cs && unsafe)
-        untyped __cs__("float *fptr = (float*)(ptr + this.data.position)");
+        untyped __cs__("float *fptr = (float*)(ptr + {0})", this.data.position);
         untyped __cs__("*fptr = (float)v");
         data.position += 4;
         #else
@@ -193,7 +193,7 @@ class Float32ArrayWrappedData
     public #if (!cs && !unsafe) inline #end function fastWriteUnsignedInt(ptr:UInt8Ptr, v:Int):Void
     {
         #if (cs && unsafe)
-        untyped __cs__("uint *uiptr = (uint*)(ptr + this.data.position)");
+        untyped __cs__("uint *uiptr = (uint*)(ptr + {0})", this.data.position);
         untyped __cs__("*uiptr = (uint)v");
         data.position += 4;
         #else
