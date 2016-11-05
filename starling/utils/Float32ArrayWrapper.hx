@@ -220,8 +220,9 @@ class Float32ArrayWrappedData
         {
             @:privateAccess (data:ByteArrayData).__resize(value);
             var buffer:ArrayBuffer = data.toArrayBuffer();
-            float32Array = untyped __js__("new Float32Array({0})", buffer);
-            uint32Array = untyped __js__("new Uint32Array({0})", buffer);
+            var length:Int = Std.int(buffer.byteLength / 4);
+            float32Array = untyped __js__("new Float32Array({0}, 0, {1})", buffer, length);
+            uint32Array = untyped __js__("new Uint32Array({0}, 0, {1})", buffer, length);
         }
         #else
         @:privateAccess (data:ByteArrayData).__resize(value);
@@ -234,8 +235,9 @@ class Float32ArrayWrappedData
         var buffer:ArrayBuffer = data.toArrayBuffer();
         if (buffer != float32Array.buffer)
         {
-            float32Array = untyped __js__("new Float32Array({0})", buffer);
-            uint32Array = untyped __js__("new Uint32Array({0})", buffer);
+            var length:Int = Std.int(buffer.byteLength / 4);
+            float32Array = untyped __js__("new Float32Array({0}, 0, {1})", buffer, length);
+            uint32Array = untyped __js__("new Uint32Array({0}, 0, {1})", buffer, length);
         }
         #end
     }
