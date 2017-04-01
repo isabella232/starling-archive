@@ -135,7 +135,7 @@ class Painter
         _stage3D = stage3D;
         _stage3D.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated, false, 10, true);
         _context = _stage3D.context3D;
-        _shareContext = _context != null && _context.driverInfo != "Disposed";
+        _shareContext = #if flash _context != null && _context.driverInfo != "Disposed" #else false #end;
         _backBufferWidth  = _context != null ? _context.backBufferWidth  : 0;
         _backBufferHeight = _context != null ? _context.backBufferHeight : 0;
         _backBufferScaleFactor = _pixelSize = 1.0;
@@ -156,7 +156,7 @@ class Painter
         _stateStack = new Array<RenderState>();
         _stateStackPos = -1;
         _stateStackLength = 0;
-		_frameID = 0;
+        _frameID = 0;
     }
     
     /** Disposes all quad batches, programs, and - if it is not being shared -
@@ -348,6 +348,24 @@ class Painter
 
         _state.copyFrom(_stateStack[_stateStackPos], true); // -> might cause 'finishMeshBatch'
         _stateStackPos--;
+
+        if (token != null) _batchProcessor.fillToken(token);
+    }
+    
+    public function popState_noCopy():Void
+    {
+        if (_stateStackPos < 0)
+            throw new IllegalOperationError("Cannot pop empty state stack");
+
+        _stateStackPos--;
+    }
+    
+    public function restoreState(token:BatchToken=null):Void
+    {
+        if (_stateStackPos < 0)
+            throw new IllegalOperationError("Cannot restore state from empty stack");
+
+        _state.copyFrom(_stateStack[_stateStackPos], true); // -> might cause 'finishMeshBatch'
 
         if (token != null) _batchProcessor.fillToken(token);
     }

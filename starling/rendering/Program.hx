@@ -19,7 +19,6 @@ import flash.utils.ByteArray;
 
 import starling.core.Starling;
 import starling.errors.MissingContextError;
-import starling.rendering._internal.Shader;
 
 /** A Program represents a pair of a fragment- and vertex-shader.
  *
@@ -35,8 +34,8 @@ import starling.rendering._internal.Shader;
  */
 class Program
 {
-    private var _vertexShader:Shader;
-    private var _fragmentShader:Shader;
+    private var _vertexShader:ByteArray;
+    private var _fragmentShader:ByteArray;
     private var _program3D:Program3D;
 
     #if (openfl >= "4.0.0")
@@ -44,7 +43,7 @@ class Program
     #end
 
     /** Creates a program from the given AGAL (Adobe Graphics Assembly Language) bytecode. */
-    public function new(vertexShader:Shader, fragmentShader:Shader)
+    public function new(vertexShader:ByteArray, fragmentShader:ByteArray)
     {
         _vertexShader = vertexShader;
         _fragmentShader = fragmentShader;
@@ -65,7 +64,7 @@ class Program
     public static function fromSource(vertexShader:String, fragmentShader:String,
                                       agalVersion:UInt=1):Program
     {
-        #if lime_has_separate_gl_context
+        #if 0
         var context:Context3D = Starling.current.context;
         return new Program(
             sAssembler.assemble(context, Context3DProgramType.VERTEX, vertexShader/*, agalVersion*/),

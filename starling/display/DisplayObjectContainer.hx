@@ -18,6 +18,7 @@ import flash.geom.Rectangle;
 import flash.system.Capabilities;
 import flash.utils.getQualifiedClassName;
 #end
+import starling.rendering.RenderState;
 import starling.utils.ArrayUtil;
 
 #if 0
@@ -374,6 +375,7 @@ class DisplayObjectContainer extends DisplayObject
         var frameID:UInt = painter.frameID;
         var selfOrParentChanged:Bool = _lastParentOrSelfChangeFrameID == frameID;
 
+        var stateSaved:Bool = false;
         for (i in 0 ... numChildren)
         {
             var child:DisplayObject = _children[i];
@@ -387,9 +389,15 @@ class DisplayObjectContainer extends DisplayObject
                     child._lastChildChangeFrameID != frameID &&
                     child._tokenFrameID == frameID - 1)
                 {
-                    painter.pushState(sCacheToken);
+                    if (!stateSaved)
+                    {
+                        painter.pushState(sCacheToken);
+                        stateSaved = true;
+                    }
+                    else
+                        @:privateAccess painter._batchProcessor.fillToken(sCacheToken);
                     painter.drawFromCache(child._pushToken, child._popToken);
-                    painter.popState(child._popToken);
+                    painter.restoreState(child._popToken);
 
                     child._pushToken.copyFrom(sCacheToken);
                 }
@@ -398,7 +406,13 @@ class DisplayObjectContainer extends DisplayObject
                     var mask:DisplayObject = child._mask;
                     var filter:FragmentFilter = child._filter;
 
-                    painter.pushState(child._pushToken);
+                    if (!stateSaved)
+                    {
+                        painter.pushState(child._pushToken);
+                        stateSaved = true;
+                    }
+                    else
+                        @:privateAccess painter._batchProcessor.fillToken(child._pushToken);
                     painter.setStateTo(child.transformationMatrix, child.alpha, child.blendMode);
 
                     if (mask != null) painter.drawMask(mask, child);
@@ -408,12 +422,14 @@ class DisplayObjectContainer extends DisplayObject
 
                     if (mask != null) painter.eraseMask(mask);
 
-                    painter.popState(child._popToken);
+                    painter.restoreState(child._popToken);
                 }
 
                 child._tokenFrameID = frameID;
             }
         }
+        if (stateSaved)
+            painter.popState_noCopy();
     }
 
     /** Dispatches an event on all children (recursively). The event must not bubble. */

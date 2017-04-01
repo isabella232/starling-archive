@@ -49,8 +49,8 @@ class Float32ArrayWrappedData
         data = new ByteArray();
         #if (js && bytearray_wrap)
         var buffer:ArrayBuffer = data.toArrayBuffer();
-        float32Array = new Float32Array(buffer);
-        uint32Array = new UInt32Array(buffer);
+        float32Array = untyped __js__("new Float32Array({0})", buffer);
+        uint32Array = untyped __js__("new Uint32Array({0})", buffer);
         #end
     }
     
@@ -87,12 +87,12 @@ class Float32ArrayWrappedData
     #if (cs && unsafe)
     @:unsafe @:skipReflection
     #end
-    public #if (!cs && !unsafe) inline #end function writeBytes(bytes:ByteArray, offset:UInt=0, length:UInt=0)
+    public #if (!cs && !unsafe) inline #end function writeBytes(bytes:ByteArray, offset:Int=0, length:Int=0)
     {
         #if (cs && unsafe)
         @:privateAccess (data:ByteArrayData).__resize (data.position + length);
-        untyped __cs__("fixed(byte *dst = this.data.b, src = bytes.b){");
-        untyped __cs__("byte *d = dst + this.data.position, s = src + offset.@value");
+        untyped __cs__("fixed(byte *dst = {0}, src = {1}){", this.data.b, bytes.b);
+        untyped __cs__("byte *d = dst + {0}, s = src + {1}", this.data.position, offset);
         for (i in 0 ... length)
         {
             untyped __cs__("*d = *s");
@@ -130,7 +130,7 @@ class Float32ArrayWrappedData
     public #if (!cs && !unsafe) inline #end function fastReadFloat(ptr:UInt8Ptr):Float
     {
         #if (cs && unsafe)
-        var r:Float = untyped __cs__("*(float*)&ptr[data.position]");
+        var r:Float = untyped __cs__("*(float*)&ptr[{0}]", data.position);
         data.position += 4;
         return r;
         #else
@@ -141,7 +141,7 @@ class Float32ArrayWrappedData
     #if (cs && unsafe)
     @:unsafe @:skipReflection
     #end
-    public #if flash inline #end function fastWriteBytes(ptr:UInt8Ptr, bytes:ByteArray, offset:UInt, length:UInt)
+    public #if flash inline #end function fastWriteBytes(ptr:UInt8Ptr, bytes:Float32ArrayWrapper, offset:Int, length:Int)
     {
         #if (cs && unsafe)
         
@@ -150,9 +150,9 @@ class Float32ArrayWrappedData
             throw "length should be multiple of 4";
         #end
         
-        untyped __cs__("fixed(byte *src = bytes.b){");
-        untyped __cs__("uint *d = (uint*)(ptr + this.data.position), s = (uint*)(src + offset)");
-        for (i in 0 ... untyped __cs__("(int)(length / 4)"))
+        untyped __cs__("fixed(byte *src = bytes.data.b){");
+        untyped __cs__("uint *d = (uint*)({0} + {1}), s = (uint*)(src + {2})", ptr, this.data.position, offset);
+        for (i in 0 ... untyped __cs__("(int)({0} / 4)", length))
         {
             untyped __cs__("*d = *s");
             untyped __cs__("d++;s++");
@@ -162,9 +162,10 @@ class Float32ArrayWrappedData
         #elseif flash
         data.writeBytes(bytes, offset, length);
         #elseif (js && bytearray_wrap)
-        @:privateAccess (data:ByteArrayData).b.set(
-            (offset == 0 && length == (bytes:ByteArrayData).b.length) ? (bytes:ByteArrayData).b : @:privateAccess (bytes:ByteArrayData).b.subarray(offset, offset + length),
-            this.data.position);
+        var pos:Int = Std.int(this.data.position / 4);
+        var srcPos:Int = Std.int(offset / 4);
+        for (i in 0 ... Std.int(length / 4))
+            float32Array[pos++] = (bytes:Float32ArrayWrappedData).float32Array[srcPos++];
         this.data.position += length;
         #else
         (data:ByteArrayData).blit(position, (bytes:ByteArrayData), offset, length);
@@ -178,7 +179,7 @@ class Float32ArrayWrappedData
     public #if (!cs && !unsafe) inline #end function fastWriteFloat(ptr:UInt8Ptr, v:Float):Void
     {
         #if (cs && unsafe)
-        untyped __cs__("float *fptr = (float*)(ptr + this.data.position)");
+        untyped __cs__("float *fptr = (float*)(ptr + {0})", this.data.position);
         untyped __cs__("*fptr = (float)v");
         data.position += 4;
         #else
@@ -192,7 +193,7 @@ class Float32ArrayWrappedData
     public #if (!cs && !unsafe) inline #end function fastWriteUnsignedInt(ptr:UInt8Ptr, v:Int):Void
     {
         #if (cs && unsafe)
-        untyped __cs__("uint *uiptr = (uint*)(ptr + this.data.position)");
+        untyped __cs__("uint *uiptr = (uint*)(ptr + {0})", this.data.position);
         untyped __cs__("*uiptr = (uint)v");
         data.position += 4;
         #else
@@ -210,13 +211,21 @@ class Float32ArrayWrappedData
         #end
     }
     
-    public inline function resize(value:UInt):Void
+    public #if flash inline #end function resize(value:Int):Void
     {
         #if flash
         length = value;
+        #elseif (js && bytearray_wrap)
+        if (value > @:privateAccess (data:ByteArrayData).__length)
+        {
+            @:privateAccess (data:ByteArrayData).__resize(value);
+            var buffer:ArrayBuffer = data.toArrayBuffer();
+            var length:Int = Std.int(buffer.byteLength / 4);
+            float32Array = untyped __js__("new Float32Array({0}, 0, {1})", buffer, length);
+            uint32Array = untyped __js__("new Uint32Array({0}, 0, {1})", buffer, length);
+        }
         #else
         @:privateAccess (data:ByteArrayData).__resize(value);
-        createTypedArrays();
         #end
     }
     
@@ -226,8 +235,9 @@ class Float32ArrayWrappedData
         var buffer:ArrayBuffer = data.toArrayBuffer();
         if (buffer != float32Array.buffer)
         {
-            float32Array = new Float32Array(buffer, 0, Std.int(buffer.byteLength / 4));
-            uint32Array = new UInt32Array(buffer, 0, Std.int(buffer.byteLength / 4));
+            var length:Int = Std.int(buffer.byteLength / 4);
+            float32Array = untyped __js__("new Float32Array({0}, 0, {1})", buffer, length);
+            uint32Array = untyped __js__("new Uint32Array({0}, 0, {1})", buffer, length);
         }
         #end
     }

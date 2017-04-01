@@ -368,7 +368,7 @@ class IndexData
         var string:String = StringUtil.format("[IndexData numIndices={0} indices=\"{1}\"]",
             [_numIndices, toVector(sVector).join(",")]);
 
-		sVector.splice(0, sVector.length);
+        sVector.length = 0;
         return string;
     }
 
