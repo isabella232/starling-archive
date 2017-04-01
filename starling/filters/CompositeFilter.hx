@@ -133,7 +133,7 @@ class CompositeEffect extends FilterEffect
     
     private static var sLayers:Array<CompositeLayer> = [];
     private static var sOffset:Vector<Float> = Vector.ofArray([0.0, 0, 0, 0]);
-    private static var sColor:Vector<Float>  = Vector.ofArray([0, 0, 0, 0]);
+    private static var sColor:Vector<Float>  = Vector.ofArray([0.0, 0, 0, 0]);
 
     public function new(numLayers:Int=4)
     {
