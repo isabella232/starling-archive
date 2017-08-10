@@ -33,7 +33,6 @@ import flash.utils.getQualifiedClassName;
 import flash.display3D.Context3DProfile;
 import haxe.Constraints.Function;
 import openfl.errors.ArgumentError;
-import openfl.utils.Float32Array;
 
 import starling.core.Starling;
 import starling.errors.AbstractClassError;

@@ -9,7 +9,7 @@
 // =================================================================================================
 
 package starling.display;
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 import haxe.Constraints.Function;
 import openfl.Vector;
 
