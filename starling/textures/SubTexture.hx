@@ -13,7 +13,6 @@ import flash.display3D.textures.TextureBase;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
 import haxe.ds.Vector;
-import openfl.utils.Float32Array;
 import openfl.display3D.Context3DTextureFormat;
 import openfl.errors.ArgumentError;
 import starling.utils.SafeCast.safe_cast;

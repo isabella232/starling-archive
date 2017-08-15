@@ -2,9 +2,13 @@ package starling.utils;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 import haxe.io.Bytes;
-import lime.utils.UInt32Array;
-import openfl.utils.ArrayBuffer;
-import openfl.utils.Float32Array;
+
+#if (js && bytearray_wrap)
+	import openfl.utils.ArrayBuffer;
+	import openfl.utils.Float32Array;
+	import lime.utils.UInt32Array;
+#end
+
 import openfl.utils.ByteArray.ByteArrayData;
 
 @:forward(clear, fastReadFloat, fastWriteBytes, fastWriteFloat, fastWriteUnsignedInt, readFloat, readUnsignedInt, resize, writeBytes, writeFloat, writeUnsignedInt, bytesAvailable, endian, length, position)

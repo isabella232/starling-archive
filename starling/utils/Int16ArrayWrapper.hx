@@ -1,10 +1,13 @@
 package starling.utils;
-import openfl.utils.ArrayBuffer;
+
+#if (js && bytearray_wrap)
+	import openfl.utils.ArrayBuffer;
+	import openfl.utils.Float32Array;
+	import openfl.utils.Int16Array;
+#end
 import openfl.utils.ByteArray;
 import openfl.utils.ByteArray.ByteArrayData;
 import openfl.utils.Endian;
-import openfl.utils.Float32Array;
-import openfl.utils.Int16Array;
 
 @:forward(clear, fastWriteShort, readUnsignedInt, readUnsignedShort, resize, writeBytes, writeShort, writeUnsignedInt, bytesAvailable, endian, length, position)
 abstract Int16ArrayWrapper(Int16ArrayWrappedData) from Int16ArrayWrappedData to Int16ArrayWrappedData

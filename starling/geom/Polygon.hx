@@ -17,7 +17,6 @@ import openfl.errors.ArgumentError;
 import openfl.errors.Error;
 import openfl.errors.IllegalOperationError;
 import openfl.errors.RangeError;
-import openfl.utils.Float32Array;
 import starling.utils.ArrayUtil;
 
 import starling.rendering.IndexData;
